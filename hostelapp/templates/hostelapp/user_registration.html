@@ -1,0 +1,210 @@
+<!-- hostelapp/templates/user_registration.html -->
+
+{% extends "base.html" %}
+
+{% block title %}
+    <title>User Registration</title>
+{% endblock %}
+
+{% block content %}
+
+    <div class="card card-primary">
+        <div class="card-header">
+            <h3 class="card-title">User Registration</h3>
+        </div>
+
+            <form method="post" action="{% url 'user_registration' %}" id="userRegistrationForm">
+                {% csrf_token %}
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="user">Select User:</label>
+                                <select name="user" id="userDropdown" class="form-control" required style="background-color: #f9f9f9;">
+                                    <option value="" disabled selected>Select User</option>
+                                    {% for user_profile in user_profiles %}
+                                        <option value="{{ user_profile.id }}" data-organisation="{{ user_profile.organisation }}" data-branch="{{ user_profile.branch }}">{{ user_profile.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="organisation">Enter Organisation Name:</label>
+                                <input type="text" id="organisationInput" name="organisation" class="form-control" required readonly style="background-color: #f9f9f9;">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="branch">Enter Branch:</label>
+                                <input type="text" id="branchInput" name="branch" class="form-control" required readonly style="background-color: #f9f9f9;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="hostel">Select Hostel:</label>
+                                <select name="hostel" id="hostelDropdown" class="form-control" required style="background-color: #f9f9f9;">
+                                    <option value="" disabled selected>Select Hostel</option>
+                                    {% for hostel in hostels %}
+                                        <option value="{{ hostel.id }}">{{ hostel.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="floor">Select Floor:</label>
+                                <select name="floor" id="floorDropdown" class="form-control" required style="background-color: #f9f9f9;">
+                                    <option value="" disabled selected>Select Floor</option>
+                                    <!-- Options will be populated dynamically using JavaScript -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="room">Select Room:</label>
+                                <select name="room" id="roomDropdown" class="form-control" required style="background-color: #f9f9f9;">
+                                    <option value="" disabled selected>Select Room</option>
+                                    <!-- Options will be populated dynamically using JavaScript -->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="bed">Select Bed:</label>
+                                <select name="bed" id="bedDropdown" class="form-control" required style="background-color: #f9f9f9;">
+                                    <option value="" disabled selected>Select Bed</option>
+                                    <!-- Options will be populated dynamically using JavaScript -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="admission_date">Admission Date:</label>
+                                <input type="date" name="admission_date" class="form-control" required>
+                            </div>
+                        </div>    
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+            </form>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+        
+                const hostelDropdown = document.getElementById('hostelDropdown');
+                const floorDropdown = document.getElementById('floorDropdown');
+                const roomDropdown = document.getElementById('roomDropdown');
+                const bedDropdown = document.getElementById('bedDropdown');
+                const userDropdown = document.getElementById('userDropdown');
+                const organisationInput = document.getElementById('organisationInput');
+                const branchInput = document.getElementById('branchInput');
+                const registrationForm = document.getElementById('userRegistrationForm');
+        
+                function populateFloors() {
+                    const selectedHostel = hostelDropdown.value;
+                    fetch(`/get_floors/?hostel_id=${selectedHostel}`, {
+                        method: 'GET',
+                        headers: {
+                            'X-CSRFToken': csrfToken,
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        floorDropdown.innerHTML = '<option value="" disabled selected>Select Floor</option>';
+                        data.floors.forEach(floor => {
+                            const option = document.createElement('option');
+                            option.value = floor.floor_number;
+                            option.textContent = `Floor ${floor.floor_number}`;
+                            floorDropdown.appendChild(option);
+                        });
+                    });
+                }
+        
+                function populateRooms() {
+                    const selectedHostel = hostelDropdown.value;
+                    const selectedFloor = floorDropdown.value;
+                    fetch(`/get_rooms/?hostel_id=${selectedHostel}&floor_number=${selectedFloor}`, {
+                        method: 'GET',
+                        headers: {
+                            'X-CSRFToken': csrfToken,
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        roomDropdown.innerHTML = '<option value="" disabled selected>Select Room</option>';
+                        data.rooms.forEach(room => {
+                            const option = document.createElement('option');
+                            option.value = room;
+                            option.textContent = `Room ${room}`;
+                            roomDropdown.appendChild(option);
+                        });
+                    });
+                }
+        
+                function populateBeds() {
+                    const hostelId = hostelDropdown.value;
+                    const floorNumber = floorDropdown.value;
+                    const roomNumber = roomDropdown.value;
+        
+                    fetch(`/get_beds?hostel_id=${hostelId}&floor_number=${floorNumber}&room_number=${roomNumber}&is_occupied=False`)
+                        .then(response => response.json())
+                        .then(data => {
+                       
+        
+                            // Display a message if all beds are occupied
+                            const messageContainer = document.getElementById('allBedsOccupiedMessage');
+                            if (data.beds.length === 0 && !messageContainer) {
+                                const messageDiv = document.createElement('div');
+                                messageDiv.id = 'allBedsOccupiedMessage';
+                                messageDiv.className = 'alert alert-warning';
+                                messageDiv.textContent = 'All beds are occupied in this hostel.';
+                                registrationForm.insertBefore(messageDiv, registrationForm.firstChild);
+                            } else if (data.beds.length > 0 && messageContainer) {
+                                messageContainer.remove();
+                            }
+        
+                            bedDropdown.innerHTML = '<option value="" disabled selected>Select Bed</option>';
+                            data.beds.forEach(bed => {
+                                const option = document.createElement('option');
+                                option.value = bed.bed_number;
+                                option.textContent = bed.bed_number;
+                                bedDropdown.appendChild(option);
+                            });
+                        });
+                }
+        
+                hostelDropdown.addEventListener('change', populateFloors);
+                floorDropdown.addEventListener('change', populateRooms);
+                roomDropdown.addEventListener('change', populateBeds);
+        
+                userDropdown.addEventListener('change', function () {
+            
+                    const selectedOption = this.options[this.selectedIndex];
+                  
+                    if (organisationInput && branchInput) {
+                        organisationInput.value = selectedOption.dataset.organisation || '';
+                        branchInput.value = selectedOption.dataset.branch || '';
+                    }
+                   
+                });
+            });
+        </script>
+        
+        
+        
+{% endblock %}

@@ -1,0 +1,140 @@
+<!-- hostelapp/templates/add_hostel.html -->
+
+{% extends "base.html" %}
+
+{% block title %}
+
+<title>Hostel Management System | Add Hostels</title>
+
+
+{% endblock  %}
+
+
+{% block content %}
+    <div class="card card-primary">
+        <div class="card-header">
+            <h3 class="card-title">Add Hostel</h3>
+        </div>
+
+        <form method="post" action="{% url 'add_hostel_form' %}">
+            {% csrf_token %}
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="id_name">Hostel Name:</label>
+                            <input type="text" name="name" id="id_name" class="form-control" required style="background-color: #f9f9f9;">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="id_address">Address:</label>
+                            <textarea name="address" id="id_address" class="form-control" required style="background-color: #f9f9f9;"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="id_organisation">Organisation:</label>
+                            <input type="text" name="organisation" id="id_organisation" class="form-control" required style="background-color: #f9f9f9;">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="id_branch">Branch:</label>
+                            <input type="text" name="branch" id="id_branch" class="form-control" required style="background-color: #f9f9f9;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="id_total_floors">Total Floors:</label>
+                            <input type="number" name="total_floors" id="id_total_floors" class="form-control" required style="background-color: #f9f9f9;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic fields container
+                <div id="dynamicFieldsContainer">
+
+                </div> -->
+            </div>
+
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a href="{% url 'hostel_page' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- <script>
+        // JavaScript for dynamic form fields
+        document.getElementById('id_total_floors').addEventListener('input', function () {
+            const totalFloors = parseInt(this.value);
+            const container = document.getElementById('dynamicFieldsContainer');
+
+            // Clear previous dynamic fields
+            container.innerHTML = '';
+
+            // Create input fields dynamically based on total floors
+            for (let floor = 1; floor <= totalFloors; floor++) {
+                const labelRooms = document.createElement('label');
+                labelRooms.textContent = `Number of Rooms on Floor ${floor}:`;
+
+                const inputRooms = document.createElement('input');
+                inputRooms.type = 'number';
+                inputRooms.name = `total_rooms_floor_${floor}`;
+                inputRooms.id = `id_total_rooms_floor_${floor}`;
+                inputRooms.className = 'form-control mb-2';  // Added margin bottom for spacing
+                inputRooms.required = true;
+                inputRooms.style.backgroundColor = '#FCEDDA';
+
+                // Create a new row for each pair of rooms and beds
+                const row = document.createElement('div');
+                row.className = 'row';
+
+                // Create columns for each input field
+                const colRooms = document.createElement('div');
+                colRooms.className = 'col-md-6';
+                colRooms.appendChild(labelRooms);
+                colRooms.appendChild(inputRooms);
+
+                row.appendChild(colRooms);
+
+                // Create input fields for the number of beds based on the selected number of rooms
+                inputRooms.addEventListener('input', function () {
+                    const totalRooms = parseInt(this.value);
+                    for (let room = 1; room <= totalRooms; room++) {
+                        const labelBeds = document.createElement('label');
+                        labelBeds.textContent = `Number of Beds in Room ${room} on Floor ${floor}:`;
+
+                        const inputBeds = document.createElement('input');
+                        inputBeds.type = 'number';
+                        inputBeds.name = `total_beds_floor_${floor}_room_${room}`;
+                        inputBeds.id = `id_total_beds_floor_${floor}_room_${room}`;
+                        inputBeds.className = 'form-control mb-2';  // Added margin bottom for spacing
+                        inputBeds.required = true;
+                        inputBeds.style.backgroundColor = '#ADD8E6';
+
+                        // Create columns for each input field
+                        const colBeds = document.createElement('div');
+                        colBeds.className = 'col-md-6';
+                        colBeds.appendChild(labelBeds);
+                        colBeds.appendChild(inputBeds);
+
+                        row.appendChild(colBeds);
+                    }
+                });
+
+                container.appendChild(row);
+            }
+        });
+    </script> -->
+{% endblock %}

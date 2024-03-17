@@ -1,0 +1,101 @@
+<!-- hostelapp/templates/hostel.html -->
+
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Hostel Management System | View Hostels</title>
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>Hostels</h1>
+
+        <div class="row mt-4">
+            {% if hostels %}
+                {% for hostel in hostels %}
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">{{ hostel.name }}</h5>
+                                <form method="post" action="{% url 'update_hostel_status' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="hostel_id" value="{{ hostel.id }}">
+                                    {% if hostel.status == 'active' %}
+                                        <button type="submit" class="btn btn-white btn-sm btn-rounded" name="status" value="inactive">
+                                            <i class="fa fa-dot-circle-o text-danger"></i> Make Inactive
+                                        </button>
+                                    {% else %}
+                                        <button type="submit" class="btn btn-white btn-sm btn-rounded" name="status" value="active">
+                                            <i class="fa fa-dot-circle-o text-success"></i> Make Active
+                                        </button>
+                                    {% endif %}
+                                </form>
+    
+                            </div>
+                            <div class="card-body">
+                                
+                                {% if hostel.status == 'active' %}
+                                <p class="mb-1"><strong>Branch:</strong> {{ hostel.branch }}</p>
+                                <p class="mb-1"><strong>Organisation:</strong> {{ hostel.organisation }}</p>
+                                <div class="d-flex align-items-center">
+                                    <p class="mb-0 mr-2"><strong>Floors:</strong> {{ hostel.total_floors }}</p>
+                                    <!-- Button to trigger the modal -->
+                                    <button type="button" class="btn ml-auto" data-toggle="modal" data-target="#addFloorModal{{ hostel.id }}" >
+                                        <i class="fa fa-plus-circle" data-toggle="tooltip" title="Add Floor"></i>
+                                    </button>   
+                                </div>
+                                <!-- <div class="d-flex align-items-center">
+                                    <p class="mb-0 mr-2"><strong>Rooms:</strong>{{hostel.total_rooms}}</p>
+                                </div> -->
+                                <!-- Add more details as needed -->
+
+                                    <a href="{% url 'hostel_detail' hostel.id %}" class="btn btn-primary btn-sm mt-2">View Details</a>
+                                    
+                               
+                                <!-- Edit button -->
+                                <a href="{% url 'edit_hostel' hostel.id %}" class="btn btn-primary btn-sm mt-2">Edit</a>
+                                {% else %}
+                                    <p>Hostel is currently inactive, make active to view details</p>
+                                {% endif %}
+                                <!-- Occupied rooms and beds form -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal for adding a floor -->
+                    <div class="modal fade" id="addFloorModal{{ hostel.id }}" tabindex="-1" role="dialog" aria-labelledby="addFloorModalLabel{{ hostel.id }}" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="addFloorModalLabel{{ hostel.id }}">Add Floor</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Form inside the modal -->
+                                    <form method="post" action="{% url 'add_floor' hostel_id=hostel.id %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="hostel_id" value="{{ hostel.id }}">
+                                        
+                                        <div class="form-group">
+                                            <label for="floor_number">Enter Number of Floors you want to add:</label>
+                                            <input type="number" name="floor_number" id="floor_number" class="form-control" required>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary">Add Floor</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <p>No hostels available. Please add a hostel to get started.</p>
+                    <a href="{% url 'add_hostel_form' %}" class="btn btn-primary">Add Hostel</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

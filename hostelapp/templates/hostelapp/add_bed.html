@@ -1,0 +1,70 @@
+<!-- hostelapp/templates/hostelapp/add_bed.html -->
+
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Hostel Management System | Add Beds</title>
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>Add Beds - {{ hostel.name }}</h1>
+        <form method="post" action="{% url 'add_bed' hostel.id %}">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="floor">Select Floor:</label>
+                <select name="floor" id="floor" class="form-control" required>
+                    <option value="" disabled selected>Select Floor</option>
+                    {% for floor in floors %}
+                        <option value="{{ floor.floor_number }}">{{ floor.floor_number }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="room">Select Room:</label>
+                <select name="room" id="room" class="form-control" required>
+                    <option value="" disabled selected>Select Room</option>
+                    <!-- Rooms will be dynamically populated using JavaScript -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="num_beds">Enter Number of Beds:</label>
+                <input type="number" name="num_beds" id="num_beds" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add Beds</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        // JavaScript code to dynamically populate rooms based on the selected floor
+        $(document).ready(function () {
+            $('#floor').change(function () {
+                var floorNumber = $(this).val();
+                // Fetch and populate rooms using AJAX
+                $.ajax({
+                    url: "{% url 'get_rooms' %}?hostel_id={{ hostel.id }}&floor_number=" + floorNumber,
+                    type: 'GET',
+                    success: function (data) {
+                        var roomDropdown = $("#room");
+                        roomDropdown.empty();
+                        if (data.rooms.length > 0) {
+                            for (var i = 0; i < data.rooms.length; i++) {
+                                roomDropdown.append($("<option>").text(data.rooms[i]).val(data.rooms[i]));
+                            }
+                        } else {
+                            roomDropdown.append($("<option>").text("No rooms available").val(""));
+                        }
+                    },
+                    error: function (error) {
+                        console.log("Error fetching rooms: " + JSON.stringify(error));
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

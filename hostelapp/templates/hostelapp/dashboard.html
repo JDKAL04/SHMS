@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Hostel Management System | Dashboard</title>
+{% endblock %}
+
+{% block content %}
+<div class="row" style="margin-top: 30px;">
+    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+        <div class="card dash-widget">
+            <a href="{% url "hostel_page" %}">
+                <div class="card-body">
+                    <span class="dash-widget-icon"><i class="fa fa-building"></i></span>
+                    <div class="dash-widget-info">
+                        <h3>{{ active_hostel_count }}</h3>
+                        <span>Total Hostels</span>  
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+        <div class="card dash-widget">
+            <a href="#">
+                <div class="card-body">
+                    <span class="dash-widget-icon"><i class="fa fa-home"></i></span>
+                    <div class="dash-widget-info">
+                        <h3>{{ total_rooms }}</h3>
+                        <span>Total Rooms</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+        <div class="card dash-widget">
+            <a href="{% url "hostel_page" %}">
+                <div class="card-body">
+                    <span class="dash-widget-icon"><i class="fa fa-bed"></i></span>
+                    <div class="dash-widget-info">
+                        <h3>{{ total_beds }}</h3>
+                        <span>Total Beds</span>
+                    </div>
+                </div>
+            </a>
+        </div>  
+    </div>
+    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+        <div class="card dash-widget">
+            <a href="{% url "view_users" %}">
+                <div class="card-body">
+                    <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
+                    <div class="dash-widget-info">
+                        <h3>{{ total_students }}</h3>
+                        <span>Total Students</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-6">
+        <div class="card card-danger">
+            <div class="card-header">
+                <h3 class="card-title">Occupancy Distribution</h3>
+            </div>
+            <div class="card-body">
+                <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 572px;"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card card-success">
+            <div class="card-header">
+                <h3 class="card-title">Floor Distribution</h3>
+            </div>
+            <div class="card-body">
+                <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 572px;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card card-danger">
+            <div class="card-header">
+                <h3 class="card-title">Occupancy Distribution in Hostel</h3>
+            </div>
+            <div class="card-body">
+                <canvas id="dualBarChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 572px;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+        // Pie chart
+        var ctxPie = document.getElementById('pieChart').getContext('2d');
+        var totalBeds = {{ total_beds }};
+        var occupiedBeds = {{ total_students }};  
+        var vacantBeds = totalBeds - occupiedBeds;
+
+        var pieChart = new Chart(ctxPie, {
+            type: 'pie',
+            data: {
+                labels: ['Occupied Beds', 'Vacant Beds'],
+                datasets: [
+                    {
+                        data: [occupiedBeds, vacantBeds],
+                        backgroundColor: ['rgba(255, 99, 132, 0.8)', 'rgba(75, 192, 192, 0.8)'],
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+            },
+        });
+
+        // Bar chart
+        var ctxBar = document.getElementById('barChart').getContext('2d');
+        var hostelData = [{% for hostel in hostels %}{ name: "{{ hostel.name }}", floors: {{ hostel.total_floors }} }, {% endfor %}];
+
+        var hostelNames = hostelData.map(data => data.name);
+        var floorCounts = hostelData.map(data => data.floors);
+
+        var barChart = new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: hostelNames,
+                datasets: [
+                    {
+                        label: 'Floors',
+                        data: floorCounts,
+                        backgroundColor: 'rgba(75, 192, 192, 0.8)',
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        precision: 0,
+                    },
+                },
+            },
+        });
+    </script>
+
+<script>
+    // Dual bar chart
+    var ctxDualBar = document.getElementById('dualBarChart').getContext('2d');
+
+    var hostelData = [
+        {% for data in hostel_occupancy_data %}
+            {
+                'hostel': "{{ data.hostel.name }}",
+                'occupied_beds': {{ data.occupied_beds }},
+                'vacant_beds': {{ data.vacant_beds }},
+            },
+        {% endfor %}
+    ];
+
+    var hostelNames = hostelData.map(data => data.hostel);
+    var occupiedBeds = hostelData.map(data => data.occupied_beds);
+    var vacantBeds = hostelData.map(data => data.vacant_beds);
+
+    var dualBarChart = new Chart(ctxDualBar, {
+        type: 'bar',
+        data: {
+            labels: hostelNames,
+            datasets: [
+                {
+                    label: 'Occupied Beds',
+                    backgroundColor: 'rgba(255, 99, 132, 0.8)',
+                    data: occupiedBeds,
+                },
+                {
+                    label: 'Vacant Beds',
+                    backgroundColor: 'rgba(75, 192, 192, 0.8)',
+                    data: vacantBeds,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    stacked: true,
+                },
+                y: {
+                    stacked: true,
+                },
+            },
+        },
+    });
+</script>
+
+{% endblock %}

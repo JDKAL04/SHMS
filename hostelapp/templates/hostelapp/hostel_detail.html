@@ -1,0 +1,127 @@
+<!-- hostelapp/templates/hostel_detail.html -->
+
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Hostel Management System | {{ hostel.name }} - {{ hostel.branch }}</title>
+{% endblock %}
+
+{% block content %}
+    <!-- <div class="container mt-4"> -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h1 class="card-title mb-0 text-white">{{ hostel.name }} - {{ hostel.branch }}</h1>
+                    </div>
+
+                    <div class="card-body">
+
+                        <!-- Hostel Information and Total Rooms and Beds Section -->
+                        <section class="mb-4">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <strong>Total Floors:</strong> {{ hostel.total_floors }}
+                                </div>
+                                <div class="col-md-3">
+                                    <strong>Total Rooms:</strong> {{ totalRooms }}
+                                </div>
+                                <div class="col-md-3">
+                                    <strong>Total Beds:</strong> {{ totalBeds }}
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="{% url "add_room" hostel.id %}" class="btn btn-success btn-sm">Add Rooms</a>
+                                    <a href="{% url "add_bed" hostel.id %}" class="btn btn-warning btn-sm text-white">Add Beds</a>
+                                </div>
+                
+                            </div>
+                        </section>
+
+                        <!-- Floor and Room Details Section -->
+                        <section>
+                            <div class="row">
+                                {% if hostel.floor_set.all %}
+                                    {% for floor in hostel.floor_set.all %}
+                                        <div class="col-12 col-md-6 col-lg-4 d-flex">
+                                            <div class="card flex-fill bg-light mb-2">
+                                                <div class="card-header bg-light text-white">
+                                                    <h5 class="card-title mb-1">Floor {{ floor.floor_number }}</h5>
+                                                    <ul role="tablist" class="nav nav-tabs card-header-tabs float-right">
+                                                        {% if floor.room_set.all %}
+                                                            {% for room in floor.room_set.all %}
+                                                                <li class="nav-item">
+                                                                    <a href="#room-{{ room.room_number }}" data-toggle="tab" class="nav-link{% if forloop.first %} active{% endif %}">Room {{ room.room_number }}</a>
+                                                                </li>
+                                                            {% endfor %}
+                                                        {% else %}
+                                                            <li class="nav-item">
+                                                                <span class="nav-link disabled">No Rooms Available</span>
+                                                            </li>
+                                                        {% endif %}
+                                                    </ul>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="tab-content pt-0">
+                                                        {% if floor.room_set.all %}
+                                                            {% for room in floor.room_set.all %}
+                                                                <div role="tabpanel" id="room-{{ room.room_number }}" class="tab-pane fade{% if forloop.first %} active show{% endif %}">
+                                                                    {% if room.bed_set.all %}
+                                                                        <p class="card-text">
+                                                                            Beds: {{ room.number_of_beds }}<br>
+                                                                        </p>
+                                                                        <div class="d-flex flex-wrap">
+                                                                            {% for bed in room.bed_set.all %}
+                                                                            <a href="#">
+                                                                                <div class="p-2" data-toggle="tooltip" data-placement="top" title="{% if bed.is_occupied %}Occupied{% else %}Vacant{% endif %}">
+                                                                                    <i class="fa fa-bed text-{% if bed.is_occupied %}danger{% else %}success{% endif %}" style="font-size: 24px;"></i>
+                                                                                </div>
+                                                                            </a>
+                                                                                {% if forloop.counter|divisibleby:6 and not forloop.last %}
+                                                                                <div class="w-100"></div>
+                                                                                {% endif %}
+                                                                            {% endfor %}
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <p class="text-muted">No Beds Available</p>
+                                                                    {% endif %}
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% else %}
+                                                            <p class="text-muted">No Beds Available</p>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="col-12">
+                                        <p class="text-muted">No Floors Available</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="card-footer bg-light">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <!-- Add graphs or charts here -->
+                            </div>
+                            <div class="col-md-6">
+                                <!-- Add additional information or cards here -->
+                            </div>
+                        </div>
+                        <a href="{% url 'hostel_page' %}" class="btn btn-secondary btn-sm">Back to Hostels</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- </div> -->
+
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+{% endblock %}  

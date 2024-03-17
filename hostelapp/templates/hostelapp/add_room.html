@@ -1,0 +1,46 @@
+<!-- hostelapp/templates/add_room.html -->
+
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Hostel Management System | Add Room</title>
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>Add Room - {{ hostel.name }}</h1>
+
+        <form method="post" action="{% url 'add_room' hostel_id=hostel.id %}">
+            {% csrf_token %}
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="floor_number">Select Floor:</label>
+                            <select name="floor_number" id="floor_number" class="form-control" required style="background-color: #f9f9f9;">
+                                <option value="" disabled selected>Select Floor</option>
+                                {% for floor in floors %}
+                                    <option value="{{ floor.floor_number }}">{{ floor.floor_number }}</option>
+                                 {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="room_number">Enter Room Number:</label>
+                            <input type="number" name="room_number" class="form-control" required style="background-color: #f9f9f9;">
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add Room</button>
+        </form>
+    </div>
+
+
+        
+
+{% endblock %}
