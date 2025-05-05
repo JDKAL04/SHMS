@@ -1,0 +1,47 @@
+{# templates/finances/grant_cheque_sheet.html #}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Grant Cheque Sheet</title>
+    <style>
+      body { font-family: sans-serif; }
+      h1, h2 { text-align: center; }
+      table { width: 100%; border-collapse: collapse; margin-bottom: 2em; }
+      th, td { border: 1px solid #333; padding: 0.5em; }
+      th { background: #eee; }
+      .page-break { page-break-after: always; }
+    </style>
+  </head>
+  <body>
+    <h1>Annual Grant Cheque Sheet</h1>
+    {% for alloc in allocs %}
+      <h2>Hall: {{ alloc.hall.name }} — Year {{ alloc.year }}</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Allocation Amount</th>
+            <th>Total Expenditures</th>
+            <th>Remaining Balance</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% with spent=alloc.grantexpenditure_set.all|sum_attribute:"amount" %}
+          {% with balance=alloc.amount|floatformat:2|floatformat:""|add:"0"|add:"-"|add:spent %}
+          <tr>
+            <td>${{ alloc.amount }}</td>
+            <td>${{ spent }}</td>
+            <td>${{ alloc.amount|floatformat:2|add:"-"|add:spent|floatformat:2 }}</td>
+          </tr>
+          {% endwith %}
+          {% endwith %}
+        </tbody>
+      </table>
+
+      <h3>Cheque to: {{ alloc.hall.warden.get_full_name }}</h3>
+      <p>Amount: <strong>${{ alloc.amount }}</strong></p>
+      <p>Payable to the order of <strong>{{ alloc.hall.name }} Hostel</strong></p>
+      <div class="page-break"></div>
+    {% endfor %}
+  </body>
+</html>

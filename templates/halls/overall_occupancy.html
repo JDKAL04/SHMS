@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Overall Occupancy{% endblock %}
+
+{% block content %}
+  <div class="page-header">
+    <h2>Overall Occupancy</h2>
+  </div>
+  <p><strong>Total rooms:</strong> {{ total_rooms }}</p>
+  <p><strong>Occupied:</strong>    {{ occupied }}</p>
+  <p><strong>Vacant:</strong>      {{ vacant }}</p>
+
+  <h3>Breakdown by Hall</h3>
+  <ul>
+    {% for stat in hall_stats %}
+      <li>
+        <a href="{% url 'halls:hall_occupancy' stat.hall.id %}">
+          {{ stat.hall.name }}
+        </a>
+        : {{ stat.occupied }} occupied, {{ stat.vacant }} vacant
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

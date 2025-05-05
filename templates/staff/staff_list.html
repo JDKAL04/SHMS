@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+  <h2>Staff Members</h2>
+  <a href="{% url 'staff:staff_create' %}" class="btn btn-primary float-right">+ New Staff</a>
+</div>
+<table class="table">
+  <thead><tr><th>Name</th><th>Daily Pay</th></tr></thead>
+  <tbody>
+    {% for s in staffs %}
+    <tr>
+      <td>{{ s.name }}</td>
+      <td>{{ s.daily_pay }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="2">No staff yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

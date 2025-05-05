@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+  <h2>Mess Charges</h2>
+  <a href="{% url 'mess:messcharge_create' %}" class="btn btn-primary float-right">+ New Charge</a>
+</div>
+<table class="table table-striped">
+  <thead><tr><th>Student</th><th>Hall</th><th>Month</th><th>Amount</th></tr></thead>
+  <tbody>
+    {% for c in charges %}
+    <tr>
+      <td>{{ c.student.name }}</td>
+      <td>{{ c.hall.name }}</td>
+      <td>{{ c.month|date:"F Y" }}</td>
+      <td>{{ c.amount }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4">No mess charges recorded.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+<a href="{% url 'mess:student_dues' %}" class="btn btn-secondary">View Student Dues</a>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+  <h2>Payments</h2>
+  <a href="{% url 'payments:payment_create' %}" class="btn btn-primary float-right">+ New Payment</a>
+  <a href="{% url 'payments:dues_overview' %}" class="btn btn-secondary float-right mr-2">View Dues</a>
+</div>
+<table class="table">
+  <thead><tr><th>Student</th><th>Date</th><th>Amount</th><th>Method</th><th>Cheque</th></tr></thead>
+  <tbody>
+    {% for p in payments %}
+    <tr>
+      <td>{{ p.student.name }}</td>
+      <td>{{ p.date }}</td>
+      <td>{{ p.amount }}</td>
+      <td>{{ p.get_method_display }}</td>
+      <td>
+        <a href="{% url 'payments:payment_cheque' p.id %}"
+           class="btn btn-sm btn-outline-primary">
+          Print Cheque
+        </a>
+      </td>
+      <td>
+        {% if p.method == p.METHOD_CHEQUE %}
+          <a href="{% url 'cheque_create' p.pk %}" class="btn btn-sm btn-info">Enter Cheque</a>
+        {% else %}
+          —
+        {% endif %}
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="5">No payments recorded.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

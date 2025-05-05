@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+  <h2>Student Dues for {{ month }}/{{ year }}</h2>
+</div>
+<table class="table table-bordered">
+  <thead><tr>
+    <th>Student</th><th>Hall</th><th>Mess</th><th>Rent</th><th>Amenity</th><th>Total Due</th>
+  </tr></thead>
+  <tbody>
+    {% for d in dues_list %}
+    <tr>
+      <td>{{ d.student.name }}</td>
+      <td>{{ d.hall.name }}</td>
+      <td>{{ d.mess }}</td>
+      <td>{{ d.rent }}</td>
+      <td>{{ d.amenity }}</td>
+      <td><strong>{{ d.total }}</strong></td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6">No dues found for this month.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+<a href="{% url 'mess:messcharge_list' %}" class="btn btn-secondary">Back to Charges</a>
+{% endblock %}

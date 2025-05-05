@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Students{% endblock %}
+
+{% block content %}
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+  <h2>Students</h2>
+  <a href="{% url 'students:student_create' %}" class="btn btn-primary">+ New Student</a>
+</div>
+
+<table class="table table-bordered table-striped">
+  <thead class="thead-light">
+    <tr>
+      <th>Name</th>
+      <th>Permanent Address</th>
+      <th>Contact</th>
+      <th>Photo</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for student in students %}
+      <tr>
+        <td>{{ student.name }}</td>
+        <td>{{ student.address }}</td>
+        <td>{{ student.contact }}</td>
+        <td>
+          {% if student.photo %}
+            <img src="{{ student.photo.url }}" alt="Photo" style="height:40px;"/>
+          {% else %}
+            —
+          {% endif %}
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="5" class="text-center">No students yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

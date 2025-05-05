@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Salary Report</h2>
+  <table>
+    <tr><th>Name</th><th>Days Present</th><th>Salary</th></tr>
+    {% for item in data %}
+      <tr><td>{{ item.staff }}</td><td>{{ item.days }}</td><td>₹{{ item.salary }}</td></tr>
+    {% endfor %}
+  </table>
+{% endblock %}

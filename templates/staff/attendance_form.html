@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header"><h2>Attendance Log</h2></div>
+<form method="post" class="mb-3">{% csrf_token %}
+  {{ form.as_p }}
+  <button class="btn btn-success">Log</button>
+  <a href="{% url 'staff:payroll_list' %}" class="btn btn-secondary">Compute Payroll</a>
+</form>
+<table class="table table-sm">
+  <thead><tr><th>Staff</th><th>Date</th><th>Leave?</th></tr></thead>
+  <tbody>
+    {% for a in logs %}
+    <tr>
+      <td>{{ a.staff.name }}</td>
+      <td>{{ a.date }}</td>
+      <td>{{ a.is_leave }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="3">No attendance logs yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

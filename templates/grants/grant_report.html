@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Grant Report</title></head><body>
+  <h1>Grants & Expenditures</h1>
+  <table>
+    <tr><th>Hall</th><th>Grant</th><th>Spent</th><th>Balance</th></tr>
+    {% for row in data %}
+      <tr><td>{{ row.hall__name }}</td><td>₹{{ row.grant }}</td><td>₹{{ row.spent }}</td><td>₹{{ row.balance }}</td></tr>
+    {% endfor %}
+  </table>
+</body></html>

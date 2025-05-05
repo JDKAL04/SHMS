@@ -1,0 +1,46 @@
+{# templates/staff/payroll_cheques.html #}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Payroll Cheques</title>
+  <style>
+    body { font-family: sans-serif; margin: 2cm; }
+    .cheque { width: 100%; border: 1px solid #333; padding: 1em; margin-bottom: 2cm; }
+    .cheque h2 { margin-top: 0; }
+    .field { margin: 0.5em 0; }
+    .label { display: inline-block; width: 20%; font-weight: bold; }
+    .page-break { page-break-after: always; }
+  </style>
+</head>
+<body>
+  <h1 style="text-align:center;">Staff Payroll Cheques</h1>
+
+  {% for p in payrolls %}
+    <div class="cheque">
+      <h2>Cheque for {{ p.staff.get_full_name }}</h2>
+      <div class="field">
+        <span class="label">Date:</span>
+        {{ p.month }}-{{ p.year }}
+      </div>
+      <div class="field">
+        <span class="label">Amount:</span>
+        ₹{{ p.amount }}
+      </div>
+      <div class="field">
+        <span class="label">Account No:</span>
+        {{ p.staff.bank_account }}
+      </div>
+      <div class="field">
+        <span class="label">Pay to:</span>
+        {{ p.staff.get_full_name }}
+      </div>
+      <div class="field" style="margin-top:2em;">
+        _______________________________<br>
+        Authorized Signature
+      </div>
+    </div>
+    <div class="page-break"></div>
+  {% endfor %}
+</body>
+</html>

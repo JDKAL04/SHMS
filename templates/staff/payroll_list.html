@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header"><h2>Payroll for {{ month }}/{{ year }}</h2></div>
+<table class="table table-bordered">
+  <thead><tr><th>Staff</th><th>Month</th><th>Amount</th></tr></thead>
+  <tbody>
+    {% for p in payrolls %}
+    <tr>
+      <td>{{ p.staff.name }}</td>
+      <td>{{ p.month }}</td>
+      <td>{{ p.amount }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="3">No payrolls computed yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

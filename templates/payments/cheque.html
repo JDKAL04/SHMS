@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Payment Cheque</title></head>
+<body>
+  <h1>Cheque for {{ payment.student.get_full_name }}</h1>
+  <p>Amount: ₹{{ payment.amount }}</p>
+  <p>Date: {{ payment.date|date:'Y-m-d' }}</p>
+</body>
+</html>

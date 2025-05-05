@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{% if form.instance.pk %}Edit Student{% else %}New Student{% endif %}{% endblock %}
+
+{% block content %}
+<div class="page-header mb-4">
+  <h2>{% if form.instance.pk %}Edit Student{% else %}New Student{% endif %}</h2>
+</div>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="card p-4">
+    {{ form.non_field_errors }}
+    {% for field in form %}
+      <div class="form-group">
+        {{ field.label_tag }}
+        {{ field }}
+        {{ field.errors }}
+      </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <a href="{% url 'students:student_list' %}" class="btn btn-secondary">Cancel</a>
+  </div>
+</form>
+{% endblock %}

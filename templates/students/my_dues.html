@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h2>My Dues</h2>
+    <table class="table table-bordered mt-3">
+      <tr>
+        <th>Mess Charges</th>
+        <td>₹{{ mess_total }}</td>
+      </tr>
+      <tr>
+        <th>Room Rent</th>
+        <td>₹{{ rent_amount }}</td>
+      </tr>
+      <tr>
+        <th>Amenity Charges</th>
+        <td>₹{{ amenity_total }}</td>
+      </tr>
+      <tr class="table-success">
+        <th>Total Due</th>
+        <td><strong>₹{{ total_due }}</strong></td>
+      </tr>
+    </table>
+  </div>
+{% endblock %}

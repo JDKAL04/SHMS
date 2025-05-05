@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Due for {{ student.name }}</h2>
+  <p>Mess Charges: ₹{{ mess }}</p>
+  <p>Room Rent: ₹{{ rent }}</p>
+  <p>Amenity Charge: ₹{{ amenity }}</p>
+  <hr>
+  <p><strong>Total Due: ₹{{ total_due }}</strong></p>
+{% endblock %}

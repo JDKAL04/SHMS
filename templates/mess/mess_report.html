@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Mess Report</title></head>
+<body>
+  <h1>Mess Charges Report</h1>
+  <table>
+    <tr><th>Hall</th><th>Total Amount</th></tr>
+    {% for row in data %}
+      <tr><td>{{ row.student__hall__name }}</td><td>₹{{ row.total }}</td></tr>
+    {% endfor %}
+  </table>
+</body>
+</html>

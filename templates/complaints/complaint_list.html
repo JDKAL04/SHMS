@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Your Complaints – SHMS{% endblock %}
+{% block content %}
+  <h2>Complaints</h2>
+  <ul class="list-group">
+    {% for c in complaints %}
+      <li class="list-group-item">
+        <strong>{{ c.category }}</strong> – {{ c.status }}<br>
+        {{ c.description }}<br>
+        <small class="text-muted">{{ c.created_at }}</small>
+      </li>
+    {% empty %}
+      <li class="list-group-item">No complaints found.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

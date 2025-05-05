@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Annual Statement for {{ year }}</h2>
+  <p>Total Grants: ₹{{ grants }}</p>
+  <p>Total Expenses: ₹{{ expenses }}</p>
+  <p>Total Payments: ₹{{ payments }}</p>
+  <p><strong>Net Balance: ₹{{ grants|add:-expenses|add:-payments }}</strong></p>
+{% endblock %}

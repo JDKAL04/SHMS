@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Room Allotment Letter</title></head>
+<body>
+  <h1>Hostel Management Center</h1>
+  <p>Date: {{ student.admitted_on }}</p>
+  <p>To,</p>
+  <p>{{ student.name }}<br>{{ student.address }}<br>Phone: {{ student.phone }}</p>
+  <p>Dear {{ student.name }},</p>
+  <p>We are pleased to allot you:</p>
+  <ul>
+    <li>Hall: <strong>{{ student.hall.name }}</strong></li>
+    <li>Room No.: <strong>{{ student.room.room_number }}</strong></li>
+  </ul>
+  <p>Please report to the hostel office with this letter.</p>
+  <p>Sincerely,<br>HMC Clerk</p>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Payments</h2>
+  <ul>
+    {% for p in payments %}
+      <li>{% if p.student %}{{ p.student.name }}{% else %}{{ p.staff.name }}{% endif %} – ₹{{ p.amount }} on {{ p.date }} ({{ p.category }})</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

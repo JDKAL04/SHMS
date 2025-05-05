@@ -1,0 +1,17 @@
+{# templates/mess/cheque_sheet.html #}
+<!DOCTYPE html><html><body>
+    <h1>Mess Manager Cheques</h1>
+    {% for mgr, charges in managers.items %}
+      <h2>{{ mgr.get_full_name }} ({{ mgr.bank_account }})</h2>
+      <table width="100%" border="1" cellspacing="0" cellpadding="4">
+        <tr><th>Student</th><th>Amount</th></tr>
+        {% for c in charges %}
+          <tr><td>{{ c.student.name }}</td><td>{{ c.amount }}</td></tr>
+        {% endfor %}
+        <tr><td><strong>Total</strong></td>
+            <td><strong>{{ charges|sum(attribute='amount') }}</strong></td></tr>
+      </table>
+      <div style="page-break-after: always;"></div>
+    {% endfor %}
+  </body></html>
+  

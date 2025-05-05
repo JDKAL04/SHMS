@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="page-header">
+    <h2>Payroll for {{ month }}/{{ year }}</h2>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Staff Member</th>
+        <th>Days Present</th>
+        <th>Daily Rate</th>
+        <th>Total Pay</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in payroll_items %}
+      <tr>
+        <td>{{ item.staff.name }}</td>
+        <td>{{ item.days_worked }}</td>
+        <td>{{ item.staff.daily_pay }}</td>
+        <td>{{ item.total_pay }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="4" class="text-center">No payroll data available.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

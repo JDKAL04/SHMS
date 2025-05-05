@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h2>My Admissions</h2>
+    <table class="table table-striped mt-3">
+      <thead>
+        <tr>
+          <th>Hall</th>
+          <th>Room Number</th>
+          <th>Admission Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for admission in admissions %}
+          <tr>
+            <td>{{ admission.hall.name }}</td>
+            <td>{{ admission.room.number }}</td>
+            <td>{{ admission.date }}</td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="3">You have no admissions recorded.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

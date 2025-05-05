@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="page-header">
+    <h2>Add New Staff Member</h2>
+  </div>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="form-group">
+      {{ form.name.label_tag }}
+      {{ form.name }}
+      {{ form.name.errors }}
+    </div>
+    <div class="form-group">
+      {{ form.daily_pay.label_tag }}
+      {{ form.daily_pay }}
+      {{ form.daily_pay.errors }}
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="{% url 'staff:staff_list' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+{% endblock %}

@@ -1,0 +1,63 @@
+{# templates/staff/payslip.html #}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Payslip: {{ payroll.staff.get_full_name }}</title>
+  <style>
+    body { font-family: sans-serif; margin: 2cm; }
+    h1, h2 { text-align: center; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1em; }
+    th, td { border: 1px solid #333; padding: 0.5em; }
+    th { background: #eee; text-align: left; }
+    .section { margin-top: 1.5em; }
+  </style>
+</head>
+<body>
+  <h1>Payslip</h1>
+  <h2>{{ payroll.month }}-{{ payroll.year }}</h2>
+
+  <div class="section">
+    <strong>Employee:</strong> {{ payroll.staff.get_full_name }}<br>
+    <strong>Designation:</strong> {{ payroll.staff.job_title }}<br>
+    <strong>Employee ID:</strong> {{ payroll.staff.id }}
+  </div>
+
+  <div class="section">
+    <table>
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th>Amount (₹)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Basic Pay</td>
+          <td>{{ payroll.amount }}</td>
+        </tr>
+        {# If you add deductions or allowances, list them here #}
+        <tr>
+          <th>Total</th>
+          <th>{{ payroll.amount }}</th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section" style="margin-top:2em;">
+    <table style="border: none;">
+      <tr>
+        <td style="border:none; text-align:left;">
+          _______________________<br>
+          Employee Signature
+        </td>
+        <td style="border:none; text-align:right;">
+          _______________________<br>
+          HR / Finance Signature
+        </td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>

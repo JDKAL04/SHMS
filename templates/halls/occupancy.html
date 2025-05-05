@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Occupancy for {{ hall.name }}</h2>
+  <p>Total Rooms: {{ hall.rooms.count }}</p>
+  <p>Occupied: {{ occupied }}</p>
+  <p>Vacant: {{ vacant }}</p>
+{% endblock %}

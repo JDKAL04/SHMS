@@ -1,0 +1,45 @@
+<!-- templates/registration/login.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Login – SHMS{% endblock %}
+
+{% block content %}
+  <div class="login-container" style="max-width: 400px; margin: 2rem auto;">
+    <h2 class="text-center mb-4">Login to SHMS</h2>
+
+    {% if form.errors %}
+      <div class="alert alert-danger" role="alert">
+        {% for field in form %}
+          {% for error in field.errors %}
+            {{ error }}<br>
+          {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+          {{ error }}<br>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ next|default:'' }}">
+
+      <div class="form-group mb-3">
+        <label for="id_username">Username</label>
+        {{ form.username }}
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="id_password">Password</label>
+        {{ form.password }}
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Log In</button>
+    </form>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <!-- No additional scripts for login page -->
+{% endblock %}

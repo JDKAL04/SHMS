@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Halls</h1>
+  <a href="{% url 'halls:hall_create' %}">+ New Hall</a>
+  <ul>
+    {% for hall in halls %}
+      <li>
+        {{ hall.name }} {% if hall.is_new %}(New){% endif %}
+        — <a href="{% url 'halls:room_list_by_hall' hall.id %}">view rooms</a>
+      </li>
+    {% empty %}
+      <li>No halls yet.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
