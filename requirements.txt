@@ -1,6 +1,0 @@
-django>=4.2.8
-weasyprint>=58.0
-pillow>=9.0.0
-psycopg2-binary>=2.9.6      # 
-mysqlclient>=2.2.0 
-djangorestframework>=3.14.0 
